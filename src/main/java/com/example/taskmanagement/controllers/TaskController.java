@@ -144,6 +144,9 @@ public class TaskController {
         taskToUpdate.setTaskCreatedBy(user);
 
         Task newTask = taskService.updateTask(taskToUpdate);
+        if(newTask == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
+        }
         return ResponseEntity.ok(
                 new TaskResponseDto(
                         newTask.getId(),
