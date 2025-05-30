@@ -1,127 +1,102 @@
 graph TB
-    %% External Layer
-    Client[Client Applications\nREST API Consumers]
-    
-    %% Presentation Layer - Controllers
-    subgraph "Presentation Layer"
-        TC[TaskController\n@RestController\n@RequestMapping Task]
-        UC[UserController\n@RestController\n@RequestMapping User]
+    subgraph "Controllers Layer"
+        TC[TaskController]
+        UC[UserController]
     end
-    
-    %% DTO Layer
-    subgraph "Data Transfer Objects"
-        TReqDTO[TaskRequestDto]
-        TResDTO[TaskResponseDto]
-        UReqDTO[UserRequestDto]
-        UResDTO[UserResponseDto]
+
+    subgraph "Services Layer"
+        TS[TaskService]
+        US[UserService]
     end
-    
-    %% Business Layer - Services
-    subgraph "Business Logic Layer"
-        TS[TaskService\n@Service]
-        US[UserService\n@Service]
+
+    subgraph "Repository Layer"
+        TR[TaskRepository]
+        UR[UserRepository]
     end
-    
-    %% Data Access Layer - Repositories
-    subgraph "Data Access Layer"
-        TR[TaskRepository\nextends JpaRepository]
-        UR[UserRepository\nextends JpaRepository]
+
+    subgraph "Models/Entities"
+        TM[Task]
+        UM[User]
     end
-    
-    %% Domain Model - Entities
-    subgraph "Domain Model"
-        TaskEntity[Task Entity\n@Entity\n- id: Integer\n- taskName: String\n- taskDescription: String\n- taskStatus: String\n- taskPriority: Integer\n- taskDueDate: Date\n- taskCreatedBy: User]
-        UserEntity[User Entity\n@Entity\n- id: Integer\n- firstName: String\n- lastName: String\n- userName: String\n- userEmail: String\n- userPassword: String\n- tasks: List Task]
+
+    subgraph "DTOs"
+        subgraph "Request DTOs"
+            TReqDTO[TaskRequestDto]
+            UReqDTO[UserRequestDto]
+        end
+        subgraph "Response DTOs"
+            TResDTO[TaskResponseDto]
+            UResDTO[UserResponseDto]
+        end
     end
-    
-    %% Exception Handling
-    subgraph "Exception Layer"
-        TNF[TaskNotFoundException]
-        UNF[UserNotFoundException]
+
+    subgraph "Exceptions"
+        TNFE[TaskNotFoundException]
+        UNFE[UserNotFoundException]
     end
-    
-    %% Database
-    DB[(Database\nJPA/Hibernate)]
-    
-    %% Client to Controllers
-    Client -->|HTTP Requests| TC
-    Client -->|HTTP Requests| UC
-    
-    %% Controllers to DTOs
-    TC -.->|uses| TReqDTO
-    TC -.->|uses| TResDTO
-    UC -.->|uses| UReqDTO
-    UC -.->|uses| UResDTO
-    
-    %% Controllers to Services
-    TC -->|@Autowired| TS
-    TC -->|@Autowired| US
-    UC -->|@Autowired| US
-    
-    %% Services to Repositories
-    TS -->|@Autowired| TR
-    TS -->|@Autowired| US
-    US -->|@Autowired| UR
-    
-    %% Repositories to Database
-    TR -->|JPA Operations| DB
-    UR -->|JPA Operations| DB
-    
-    %% Services to Entities
-    TS -.->|manages| TaskEntity
-    US -.->|manages| UserEntity
-    
-    %% Entity Relationships
-    TaskEntity -->|@ManyToOne\n@JoinColumn| UserEntity
-    UserEntity -->|@OneToMany\nmappedBy taskCreatedBy| TaskEntity
-    
-    %% Exception Handling
-    TS -.->|throws| TNF
-    TS -.->|throws| UNF
-    US -.->|throws| UNF
-    
-    %% API Endpoints Documentation
-    subgraph "Task API Endpoints"
-        T1[POST /Task/addTask]
-        T2[GET /Task/getTask with taskId]
-        T3[GET /Task/taskList]
-        T4[PUT /Task/updateTask with id]
-        T5[DELETE /Task/deleteTask with taskId]
+
+    subgraph "Main Application"
+        APP[TaskManagementSystemApplication]
     end
-    
-    subgraph "User API Endpoints"
-        U1[POST /User/addUser]
-        U2[GET /User/getUser with userId]
-        U3[GET /User/userList]
-        U4[GET /User/getUserTasks with userId]
-        U5[DELETE /User/deleteUser with userId]
+
+    subgraph "External Dependencies"
+        DB[(Database)]
     end
-    
-    TC -.->|implements| T1
-    TC -.->|implements| T2
-    TC -.->|implements| T3
-    TC -.->|implements| T4
-    TC -.->|implements| T5
-    
-    UC -.->|implements| U1
-    UC -.->|implements| U2
-    UC -.->|implements| U3
-    UC -.->|implements| U4
-    UC -.->|implements| U5
-    
-    %% Styling
+
+%% Controller to Service relationships
+    TC --> TS
+    UC --> US
+
+%% Service to Repository relationships
+    TS --> TR
+    US --> UR
+
+%% Repository to Model relationships
+    TR --> TM
+    UR --> UM
+
+%% Repository to Database relationships
+    TR --> DB
+    UR --> DB
+
+%% DTO relationships
+    TC -.-> TReqDTO
+    TC -.-> TResDTO
+    UC -.-> UReqDTO
+    UC -.-> UResDTO
+
+    TS -.-> TReqDTO
+    TS -.-> TResDTO
+    US -.-> UReqDTO
+    US -.-> UResDTO
+
+%% Exception handling
+    TS -.-> TNFE
+    US -.-> UNFE
+    TC -.-> TNFE
+    UC -.-> UNFE
+
+%% Main application relationships
+    APP --> TC
+    APP --> UC
+    APP --> TS
+    APP --> US
+
+%% Styling
     classDef controller fill:#e1f5fe,stroke:#01579b,stroke-width:2px
     classDef service fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
     classDef repository fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
-    classDef entity fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef model fill:#fff3e0,stroke:#e65100,stroke-width:2px
     classDef dto fill:#fce4ec,stroke:#880e4f,stroke-width:2px
     classDef exception fill:#ffebee,stroke:#b71c1c,stroke-width:2px
-    classDef endpoint fill:#f1f8e9,stroke:#33691e,stroke-width:2px
-    
+    classDef app fill:#f1f8e9,stroke:#33691e,stroke-width:2px
+    classDef database fill:#e3f2fd,stroke:#0d47a1,stroke-width:2px
+
     class TC,UC controller
     class TS,US service
     class TR,UR repository
-    class TaskEntity,UserEntity entity
-    class TReqDTO,TResDTO,UReqDTO,UResDTO dto
-    class TNF,UNF exception
-    class T1,T2,T3,T4,T5,U1,U2,U3,U4,U5 endpoint
+    class TM,UM model
+    class TReqDTO,UReqDTO,TResDTO,UResDTO dto
+    class TNFE,UNFE exception
+    class APP app
+    class DB database
