@@ -1,7 +1,6 @@
-
 graph TB
 %% External Layer
-Client[Client Applications<br/>REST API Consumers]
+    Client[Client Applications<br/>REST API Consumers]
 
 %% Presentation Layer - Controllers
 subgraph "Presentation Layer"
@@ -32,7 +31,7 @@ end
 %% Domain Model - Entities
 subgraph "Domain Model"
 TaskEntity[Task Entity<br/>@Entity<br/>- id: Integer<br/>- taskName: String<br/>- taskDescription: String<br/>- taskStatus: String<br/>- taskPriority: Integer<br/>- taskDueDate: Date<br/>- taskCreatedBy: User]
-UserEntity[User Entity<br/>@Entity<br/>- id: Integer<br/>- firstName: String<br/>- lastName: String<br/>- userName: String<br/>- userEmail: String<br/>- userPassword: String<br/>- tasks: List of Task]
+UserEntity[User Entity<br/>@Entity<br/>- id: Integer<br/>- firstName: String<br/>- lastName: String<br/>- userName: String<br/>- userEmail: String<br/>- userPassword: String<br/>- tasks: List Task]
 end
 
 %% Exception Handling
@@ -83,7 +82,6 @@ US -.->|throws| UNF
 
 %% API Endpoints Documentation
 subgraph "Task API Endpoints"
-direction TB
 T1[POST /Task/addTask]
 T2[GET /Task/getTask with taskId]
 T3[GET /Task/taskList]
@@ -92,7 +90,6 @@ T5[DELETE /Task/deleteTask with taskId]
 end
 
 subgraph "User API Endpoints"
-direction TB
 U1[POST /User/addUser]
 U2[GET /User/getUser with userId]
 U3[GET /User/userList]
