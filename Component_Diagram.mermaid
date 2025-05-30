@@ -1,11 +1,11 @@
 graph TB
     %% External Layer
-    Client[Client Applications<br/>REST API Consumers]
+    Client[Client Applications\nREST API Consumers]
     
     %% Presentation Layer - Controllers
     subgraph "Presentation Layer"
-        TC[TaskController<br/>@RestController<br/>@RequestMapping Task]
-        UC[UserController<br/>@RestController<br/>@RequestMapping User]
+        TC[TaskController\n@RestController\n@RequestMapping Task]
+        UC[UserController\n@RestController\n@RequestMapping User]
     end
     
     %% DTO Layer
@@ -18,20 +18,20 @@ graph TB
     
     %% Business Layer - Services
     subgraph "Business Logic Layer"
-        TS[TaskService<br/>@Service]
-        US[UserService<br/>@Service]
+        TS[TaskService\n@Service]
+        US[UserService\n@Service]
     end
     
     %% Data Access Layer - Repositories
     subgraph "Data Access Layer"
-        TR[TaskRepository<br/>extends JpaRepository]
-        UR[UserRepository<br/>extends JpaRepository]
+        TR[TaskRepository\nextends JpaRepository]
+        UR[UserRepository\nextends JpaRepository]
     end
     
     %% Domain Model - Entities
     subgraph "Domain Model"
-        TaskEntity[Task Entity<br/>@Entity<br/>- id: Integer<br/>- taskName: String<br/>- taskDescription: String<br/>- taskStatus: String<br/>- taskPriority: Integer<br/>- taskDueDate: Date<br/>- taskCreatedBy: User]
-        UserEntity[User Entity<br/>@Entity<br/>- id: Integer<br/>- firstName: String<br/>- lastName: String<br/>- userName: String<br/>- userEmail: String<br/>- userPassword: String<br/>- tasks: List Task]
+        TaskEntity[Task Entity\n@Entity\n- id: Integer\n- taskName: String\n- taskDescription: String\n- taskStatus: String\n- taskPriority: Integer\n- taskDueDate: Date\n- taskCreatedBy: User]
+        UserEntity[User Entity\n@Entity\n- id: Integer\n- firstName: String\n- lastName: String\n- userName: String\n- userEmail: String\n- userPassword: String\n- tasks: List Task]
     end
     
     %% Exception Handling
@@ -41,7 +41,7 @@ graph TB
     end
     
     %% Database
-    DB[(Database<br/>JPA/Hibernate)]
+    DB[(Database\nJPA/Hibernate)]
     
     %% Client to Controllers
     Client -->|HTTP Requests| TC
@@ -72,8 +72,8 @@ graph TB
     US -.->|manages| UserEntity
     
     %% Entity Relationships
-    TaskEntity -->|@ManyToOne<br/>@JoinColumn| UserEntity
-    UserEntity -->|@OneToMany<br/>mappedBy taskCreatedBy| TaskEntity
+    TaskEntity -->|@ManyToOne\n@JoinColumn| UserEntity
+    UserEntity -->|@OneToMany\nmappedBy taskCreatedBy| TaskEntity
     
     %% Exception Handling
     TS -.->|throws| TNF
